@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AccountancyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="department">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="departments_employees" Relationship="Self.departments_employees_department_id_fkey" FromRole="departments" ToRole="departments_employees" />
+    <NavigationProperty Name="projects" Relationship="Self.projects_department_id_fkey" FromRole="departments" ToRole="projects" />
+  </EntityType>
+  <EntityType Name="departments_employees">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="department_id" Type="Int32" Nullable="false" />
+    <Property Name="employee_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="department" Relationship="Self.departments_employees_department_id_fkey" FromRole="departments_employees" ToRole="departments" />
+    <NavigationProperty Name="employee" Relationship="Self.departments_employees_employee_id_fkey" FromRole="departments_employees" ToRole="employees" />
+  </EntityType>
+  <EntityType Name="employee">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="surname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="salary" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="patronymic" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="departments_employees" Relationship="Self.departments_employees_employee_id_fkey" FromRole="employees" ToRole="departments_employees" />
+  </EntityType>
+  <EntityType Name="project">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="project_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="cost" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="department_id" Type="Int32" />
+    <Property Name="date_begin" Type="DateTime" Precision="0" />
+    <Property Name="date_end" Type="DateTime" Precision="0" />
+    <Property Name="date_end_real" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="department" Relationship="Self.projects_department_id_fkey" FromRole="projects" ToRole="departments" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_name" Type="String" MaxLength="8000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="8000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="role" Type="String" MaxLength="8000" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="departments_employees_department_id_fkey">
+    <End Role="departments" Type="Self.department" Multiplicity="1" />
+    <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="departments">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="departments_employees">
+        <PropertyRef Name="department_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="projects_department_id_fkey">
+    <End Role="departments" Type="Self.department" Multiplicity="0..1" />
+    <End Role="projects" Type="Self.project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="departments">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="projects">
+        <PropertyRef Name="department_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="departments_employees_employee_id_fkey">
+    <End Role="employees" Type="Self.employee" Multiplicity="1" />
+    <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="employees">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="departments_employees">
+        <PropertyRef Name="employee_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="departments" EntityType="Self.department" />
+    <EntitySet Name="departments_employees" EntityType="Self.departments_employees" />
+    <EntitySet Name="employees" EntityType="Self.employee" />
+    <EntitySet Name="projects" EntityType="Self.project" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="departments_employees_department_id_fkey" Association="Self.departments_employees_department_id_fkey">
+      <End Role="departments" EntitySet="departments" />
+      <End Role="departments_employees" EntitySet="departments_employees" />
+    </AssociationSet>
+    <AssociationSet Name="projects_department_id_fkey" Association="Self.projects_department_id_fkey">
+      <End Role="departments" EntitySet="departments" />
+      <End Role="projects" EntitySet="projects" />
+    </AssociationSet>
+    <AssociationSet Name="departments_employees_employee_id_fkey" Association="Self.departments_employees_employee_id_fkey">
+      <End Role="employees" EntitySet="employees" />
+      <End Role="departments_employees" EntitySet="departments_employees" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

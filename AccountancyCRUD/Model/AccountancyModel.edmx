@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AccountancyModel.Store" Provider="Npgsql" ProviderManifestToken="13.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="departments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="departments_employees">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="department_id" Type="int4" Nullable="false" />
+          <Property Name="employee_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="employees">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
+          <Property Name="surname" Type="varchar" MaxLength="30" />
+          <Property Name="position" Type="varchar" MaxLength="50" />
+          <Property Name="salary" Type="numeric" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="patronymic" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="projects">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="cost" Type="numeric" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="department_id" Type="int4" />
+          <Property Name="date_begin" Type="date" />
+          <Property Name="date_end" Type="date" />
+          <Property Name="date_end_real" Type="date" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_name" Type="varchar" MaxLength="8000" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="8000" Nullable="false" />
+          <Property Name="role" Type="varchar" MaxLength="8000" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Accountancy.public.task1' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="task1">
+          <Property Name="id" Type="int4" />
+        </EntityType>-->
+        <Association Name="departments_employees_department_id_fkey">
+          <End Role="departments" Type="Self.departments" Multiplicity="1" />
+          <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="departments_employees">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="departments_employees_employee_id_fkey">
+          <End Role="employees" Type="Self.employees" Multiplicity="1" />
+          <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="departments_employees">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projects_department_id_fkey">
+          <End Role="departments" Type="Self.departments" Multiplicity="0..1" />
+          <End Role="projects" Type="Self.projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="projects">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AccountancyModelStoreContainer">
+          <EntitySet Name="departments" EntityType="Self.departments" Schema="public" store:Type="Tables" />
+          <EntitySet Name="departments_employees" EntityType="Self.departments_employees" Schema="public" store:Type="Tables" />
+          <EntitySet Name="employees" EntityType="Self.employees" Schema="public" store:Type="Tables" />
+          <EntitySet Name="projects" EntityType="Self.projects" Schema="public" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="public" store:Type="Tables" />
+          <AssociationSet Name="departments_employees_department_id_fkey" Association="Self.departments_employees_department_id_fkey">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="departments_employees" EntitySet="departments_employees" />
+          </AssociationSet>
+          <AssociationSet Name="departments_employees_employee_id_fkey" Association="Self.departments_employees_employee_id_fkey">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="departments_employees" EntitySet="departments_employees" />
+          </AssociationSet>
+          <AssociationSet Name="projects_department_id_fkey" Association="Self.projects_department_id_fkey">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="projects" EntitySet="projects" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AccountancyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="departments_employees" Relationship="Self.departments_employees_department_id_fkey" FromRole="departments" ToRole="departments_employees" />
+          <NavigationProperty Name="projects" Relationship="Self.projects_department_id_fkey" FromRole="departments" ToRole="projects" />
+        </EntityType>
+        <EntityType Name="departments_employees">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="department_id" Type="Int32" Nullable="false" />
+          <Property Name="employee_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="department" Relationship="Self.departments_employees_department_id_fkey" FromRole="departments_employees" ToRole="departments" />
+          <NavigationProperty Name="employee" Relationship="Self.departments_employees_employee_id_fkey" FromRole="departments_employees" ToRole="employees" />
+        </EntityType>
+        <EntityType Name="employee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="surname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="salary" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="patronymic" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="departments_employees" Relationship="Self.departments_employees_employee_id_fkey" FromRole="employees" ToRole="departments_employees" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cost" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="department_id" Type="Int32" />
+          <Property Name="date_begin" Type="DateTime" Precision="0" />
+          <Property Name="date_end" Type="DateTime" Precision="0" />
+          <Property Name="date_end_real" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="department" Relationship="Self.projects_department_id_fkey" FromRole="projects" ToRole="departments" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_name" Type="String" MaxLength="8000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="8000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="8000" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="departments_employees_department_id_fkey">
+          <End Role="departments" Type="Self.department" Multiplicity="1" />
+          <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="departments_employees">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projects_department_id_fkey">
+          <End Role="departments" Type="Self.department" Multiplicity="0..1" />
+          <End Role="projects" Type="Self.project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="projects">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="departments_employees_employee_id_fkey">
+          <End Role="employees" Type="Self.employee" Multiplicity="1" />
+          <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="departments_employees">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="departments" EntityType="Self.department" />
+          <EntitySet Name="departments_employees" EntityType="Self.departments_employees" />
+          <EntitySet Name="employees" EntityType="Self.employee" />
+          <EntitySet Name="projects" EntityType="Self.project" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="departments_employees_department_id_fkey" Association="Self.departments_employees_department_id_fkey">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="departments_employees" EntitySet="departments_employees" />
+          </AssociationSet>
+          <AssociationSet Name="projects_department_id_fkey" Association="Self.projects_department_id_fkey">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="projects" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="departments_employees_employee_id_fkey" Association="Self.departments_employees_employee_id_fkey">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="departments_employees" EntitySet="departments_employees" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AccountancyModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="departments">
+            <EntityTypeMapping TypeName="AccountancyModel.department">
+              <MappingFragment StoreEntitySet="departments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="departments_employees">
+            <EntityTypeMapping TypeName="AccountancyModel.departments_employees">
+              <MappingFragment StoreEntitySet="departments_employees">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="department_id" ColumnName="department_id" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employees">
+            <EntityTypeMapping TypeName="AccountancyModel.employee">
+              <MappingFragment StoreEntitySet="employees">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="salary" ColumnName="salary" />
+                <ScalarProperty Name="patronymic" ColumnName="patronymic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projects">
+            <EntityTypeMapping TypeName="AccountancyModel.project">
+              <MappingFragment StoreEntitySet="projects">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="project_name" ColumnName="project_name" />
+                <ScalarProperty Name="cost" ColumnName="cost" />
+                <ScalarProperty Name="department_id" ColumnName="department_id" />
+                <ScalarProperty Name="date_begin" ColumnName="date_begin" />
+                <ScalarProperty Name="date_end" ColumnName="date_end" />
+                <ScalarProperty Name="date_end_real" ColumnName="date_end_real" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="AccountancyModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

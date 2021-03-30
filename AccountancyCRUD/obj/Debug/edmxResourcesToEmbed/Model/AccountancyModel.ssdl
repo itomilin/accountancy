@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AccountancyModel.Store" Provider="Npgsql" ProviderManifestToken="13.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="departments">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="departments_employees">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="department_id" Type="int4" Nullable="false" />
+    <Property Name="employee_id" Type="int4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="employees">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="20" />
+    <Property Name="surname" Type="varchar" MaxLength="30" />
+    <Property Name="position" Type="varchar" MaxLength="50" />
+    <Property Name="salary" Type="numeric" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="patronymic" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="projects">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="cost" Type="numeric" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="department_id" Type="int4" />
+    <Property Name="date_begin" Type="date" />
+    <Property Name="date_end" Type="date" />
+    <Property Name="date_end_real" Type="date" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_name" Type="varchar" MaxLength="8000" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="8000" Nullable="false" />
+    <Property Name="role" Type="varchar" MaxLength="8000" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Accountancy.public.task1' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="task1">
+          <Property Name="id" Type="int4" />
+        </EntityType>-->
+  <Association Name="departments_employees_department_id_fkey">
+    <End Role="departments" Type="Self.departments" Multiplicity="1" />
+    <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="departments">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="departments_employees">
+        <PropertyRef Name="department_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="departments_employees_employee_id_fkey">
+    <End Role="employees" Type="Self.employees" Multiplicity="1" />
+    <End Role="departments_employees" Type="Self.departments_employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="employees">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="departments_employees">
+        <PropertyRef Name="employee_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="projects_department_id_fkey">
+    <End Role="departments" Type="Self.departments" Multiplicity="0..1" />
+    <End Role="projects" Type="Self.projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="departments">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="projects">
+        <PropertyRef Name="department_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="AccountancyModelStoreContainer">
+    <EntitySet Name="departments" EntityType="Self.departments" Schema="public" store:Type="Tables" />
+    <EntitySet Name="departments_employees" EntityType="Self.departments_employees" Schema="public" store:Type="Tables" />
+    <EntitySet Name="employees" EntityType="Self.employees" Schema="public" store:Type="Tables" />
+    <EntitySet Name="projects" EntityType="Self.projects" Schema="public" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="public" store:Type="Tables" />
+    <AssociationSet Name="departments_employees_department_id_fkey" Association="Self.departments_employees_department_id_fkey">
+      <End Role="departments" EntitySet="departments" />
+      <End Role="departments_employees" EntitySet="departments_employees" />
+    </AssociationSet>
+    <AssociationSet Name="departments_employees_employee_id_fkey" Association="Self.departments_employees_employee_id_fkey">
+      <End Role="employees" EntitySet="employees" />
+      <End Role="departments_employees" EntitySet="departments_employees" />
+    </AssociationSet>
+    <AssociationSet Name="projects_department_id_fkey" Association="Self.projects_department_id_fkey">
+      <End Role="departments" EntitySet="departments" />
+      <End Role="projects" EntitySet="projects" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
