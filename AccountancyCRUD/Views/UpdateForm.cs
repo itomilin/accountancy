@@ -15,9 +15,8 @@ namespace AccountancyCRUD.View
 
         public decimal GetCost
         {
-            get => !decimal.TryParse(tbCost.Text, out decimal cost) ?
-                    throw new Exception("Validation error!") : cost;
-            set => tbCost.Text = value.ToString();
+            get => numCost.Value;
+            set => numCost.Value = value;
         }
 
         public int GetId
@@ -65,7 +64,7 @@ namespace AccountancyCRUD.View
         {
             tbId.Text = null;
             tbProjectName.Text = null;
-            tbCost.Text = null;
+            numCost.Value = 0;
             dtpBeginDate.Value = DateTime.Now;
             dtpEndDate.Value = DateTime.Now;
             dtpEndRealDate.Value = DateTime.Now;

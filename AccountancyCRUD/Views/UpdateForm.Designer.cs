@@ -43,9 +43,10 @@ namespace AccountancyCRUD.View
             this.dtpEndRealDate = new System.Windows.Forms.DateTimePicker();
             this.dtpEndDate = new System.Windows.Forms.DateTimePicker();
             this.dtpBeginDate = new System.Windows.Forms.DateTimePicker();
-            this.tbCost = new System.Windows.Forms.TextBox();
             this.tbProjectName = new System.Windows.Forms.TextBox();
+            this.numCost = new System.Windows.Forms.NumericUpDown();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCost)).BeginInit();
             this.SuspendLayout();
             // 
             // btnUpdate
@@ -59,6 +60,7 @@ namespace AccountancyCRUD.View
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.numCost);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.tbId);
             this.panel1.Controls.Add(this.label6);
@@ -71,7 +73,6 @@ namespace AccountancyCRUD.View
             this.panel1.Controls.Add(this.dtpEndRealDate);
             this.panel1.Controls.Add(this.dtpEndDate);
             this.panel1.Controls.Add(this.dtpBeginDate);
-            this.panel1.Controls.Add(this.tbCost);
             this.panel1.Controls.Add(this.tbProjectName);
             this.panel1.Location = new System.Drawing.Point(12, 13);
             this.panel1.Name = "panel1";
@@ -178,19 +179,25 @@ namespace AccountancyCRUD.View
             this.dtpBeginDate.Size = new System.Drawing.Size(200, 20);
             this.dtpBeginDate.TabIndex = 15;
             // 
-            // tbCost
-            // 
-            this.tbCost.Location = new System.Drawing.Point(123, 107);
-            this.tbCost.Name = "tbCost";
-            this.tbCost.Size = new System.Drawing.Size(200, 20);
-            this.tbCost.TabIndex = 14;
-            // 
             // tbProjectName
             // 
             this.tbProjectName.Location = new System.Drawing.Point(123, 73);
             this.tbProjectName.Name = "tbProjectName";
             this.tbProjectName.Size = new System.Drawing.Size(200, 20);
             this.tbProjectName.TabIndex = 13;
+            // 
+            // numCost
+            // 
+            this.numCost.DecimalPlaces = 2;
+            this.numCost.Location = new System.Drawing.Point(123, 107);
+            this.numCost.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
+            this.numCost.Name = "numCost";
+            this.numCost.Size = new System.Drawing.Size(200, 20);
+            this.numCost.TabIndex = 27;
             // 
             // UpdateForm
             // 
@@ -207,6 +214,7 @@ namespace AccountancyCRUD.View
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateForm_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numCost)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -227,7 +235,7 @@ namespace AccountancyCRUD.View
         private System.Windows.Forms.DateTimePicker dtpEndRealDate;
         private System.Windows.Forms.DateTimePicker dtpEndDate;
         private System.Windows.Forms.DateTimePicker dtpBeginDate;
-        private System.Windows.Forms.TextBox tbCost;
         private System.Windows.Forms.TextBox tbProjectName;
+        private System.Windows.Forms.NumericUpDown numCost;
     }
 }

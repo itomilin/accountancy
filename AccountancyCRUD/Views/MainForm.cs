@@ -51,16 +51,19 @@ namespace AccountancyCRUD.View
             if (saveDialog.ShowDialog() == DialogResult.Cancel) return;
 
             var filename = saveDialog.FileName;
+            var helvetica = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 14);
 
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             using (var writer = PdfWriter.GetInstance(doc, new FileStream(filename, FileMode.Create)))
             {
-                string content = $"Obtained net worth by factory since " +
-                    $"{dtpNetWorth.Value.Date.ToShortDateString()}, \n" +
-                    $"till nowaday - {DateTime.Now.Date.ToShortDateString()}, consist " +
+                PdfPCell cell = new PdfPCell(new iTextSharp.text.Phrase("NetWorth table \"Projects\""));
+
+                string content = $"NetWorth table \"Projects\", range " +
+                    $"{dtpNetWorth.Value.Date.ToShortDateString()} - " +
+                    $"{DateTime.Now.Date.ToShortDateString()}, consist " +
                     $"{tbNetWorthResult.Text}";
                 doc.Open();
-                var helvetica = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 14);
+
                 var helveticaBase = helvetica.GetCalculatedBaseFont(false);
                 writer.DirectContent.BeginText();
                 writer.DirectContent.SetFontAndSize(helveticaBase, 12f);
@@ -70,7 +73,6 @@ namespace AccountancyCRUD.View
                 writer.DirectContent.EndText();
                 doc.Close();
                 writer.Close();
-                //File.WriteAllText(filename, );
             }
         }
     }

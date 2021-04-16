@@ -17,7 +17,7 @@ namespace AccountancyCRUD.Controller
         private readonly EmployeeForm _updateFormEmployee;
         private readonly DepartmentEmployeeForm _departmentEmployeeForm;
 
-        #region
+        #region MainController
         public MainController(params Form[] views)
         {
             foreach (var view in views)
@@ -60,6 +60,7 @@ namespace AccountancyCRUD.Controller
             _currentTableName = _mainForm.GetCombo.Text;
         }
 
+        #region CalculateNetWorth
         private void CalculateNetWorth(object sender, EventArgs e)
         {
             string query =
@@ -74,118 +75,9 @@ namespace AccountancyCRUD.Controller
                 _mainForm.SetNetWorth = result.ToString();
             }
         }
+        #endregion
 
-        private void InsertButton_Click(object sender, EventArgs e)
-        {
-            if (_currentTableName == "Projects")
-            {
-                var selected = ((ComboBox)_updateForm.Departments).SelectedItem;
-                int? id = null;
-                if (selected != null)
-                {
-                    id = ((Model.MyDepartment)selected).Id;
-                }
-                using (var context = new MyDbContext())
-                {
-                    context.Projects.Add(new Model.project
-                    {
-                        project_name = _updateForm.GetProjectName,
-                        date_begin = _updateForm.GetBeginDate,
-                        date_end = _updateForm.GetEndDate,
-                        date_end_real = _updateForm.GetEndRealDate,
-                        cost = _updateForm.GetCost,
-                        department_id = id
-                    });
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                }
-                _updateForm.Close();
-                _updateForm.GetApplyButton.Click -= InsertButton_Click;
-            }
-            else if (_currentTableName == "Departments")
-            {
-                using (var context = new MyDbContext())
-                {
-                    context.Departments.Add(new Model.department
-                    {
-                        name = _updateFormDepartments.GetDepartmentName
-                    });
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                }
-                _updateFormDepartments.Close();
-                _updateFormDepartments.GetApplyButton.Click -= InsertButton_Click;
-            }
-            else if (_currentTableName == "Employees")
-            {
-                using (var context = new MyDbContext())
-                {
-                    context.Employees.Add(new Model.employee
-                    {
-                        name = _updateFormEmployee.EmployeelName,
-                        surname = _updateFormEmployee.Surname,
-                        patronymic = _updateFormEmployee.Patronymic,
-                        position = _updateFormEmployee.Position,
-                        salary = _updateFormEmployee.Salary
-                    });
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                }
-                _updateFormEmployee.Close();
-                _updateFormEmployee.GetApplyButton.Click -= InsertButton_Click;
-            }
-            else if (_currentTableName == "DepartmentsEmployees")
-            {
-                var selDep = ((ComboBox)_departmentEmployeeForm.Departments).SelectedItem;
-                var selEmpl = ((ComboBox)_departmentEmployeeForm.Employees).SelectedItem;
-                using (var context = new MyDbContext())
-                {
-                    try
-                    {
-                        context.DepartmentsEmployees.Add(new Model.departments_employees
-                        {
-                            employee_id = ((Model.MyEmployee)selEmpl).Id,
-                            department_id = ((Model.MyDepartment)selDep).Id
-                        });
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                }
-                _departmentEmployeeForm.Close();
-                _departmentEmployeeForm.GetApplyButton.Click -= InsertButton_Click;
-            }
-
-            Read(this, new EventArgs());
-        }
-
+        #region Update
         private void UpdateButton_Click(object sender, EventArgs e)
         {
             var selected = ((ComboBox)_updateForm.Departments).SelectedItem;
@@ -212,13 +104,7 @@ namespace AccountancyCRUD.Controller
                     entry.date_end = _updateForm.GetEndDate;
                     entry.date_end_real = _updateForm.GetEndRealDate;
                     entry.cost = _updateForm.GetCost;
-
-                    try {context.SaveChanges();}
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                    _updateForm.GetApplyButton.Click -= UpdateButton_Click;
+                    //_updateForm.GetApplyButton.Click -= UpdateButton_Click;
                     _updateForm.Close();
                 }
                 else if (_currentTableName == "Departments")
@@ -227,16 +113,7 @@ namespace AccountancyCRUD.Controller
                         .Where(it => it.id == _updateFormDepartments.GetId)
                         .FirstOrDefault();
                     entry.name = _updateFormDepartments.GetDepartmentName;
-
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                    _updateFormDepartments.GetApplyButton.Click -= UpdateButton_Click;
+                    //_updateFormDepartments.GetApplyButton.Click -= UpdateButton_Click;
                     _updateFormDepartments.Close();
                 }
                 else if (_currentTableName == "Employees")
@@ -249,16 +126,7 @@ namespace AccountancyCRUD.Controller
                     entry.patronymic = _updateFormEmployee.Patronymic;
                     entry.position = _updateFormEmployee.Position;
                     entry.salary = _updateFormEmployee.Salary;
-
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                    _updateFormEmployee.GetApplyButton.Click -= UpdateButton_Click;
+                    //_updateFormEmployee.GetApplyButton.Click -= UpdateButton_Click;
                     _updateFormEmployee.Close();
                 }
                 else if (_currentTableName == "DepartmentsEmployees")
@@ -270,23 +138,23 @@ namespace AccountancyCRUD.Controller
                     entry.employee_id = employee.Id;
                     dynamic department = ((ComboBox)_departmentEmployeeForm.Departments).SelectedItem;
                     entry.department_id = department.Id;
-
-                    try
-                    {
-                        context.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("handle trigger");
-                    }
-                    _departmentEmployeeForm.GetApplyButton.Click -= UpdateButton_Click;
+                    //_departmentEmployeeForm.GetApplyButton.Click -= UpdateButton_Click;
                     _departmentEmployeeForm.Close();
+                }
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    var x = ex;
+                    MessageBox.Show("handle trigger");
                 }
             }
             Read(this, new EventArgs());
         }
 
-        #region Update
         private void Update(object sender, EventArgs e)
         {
             string selectedTable = _mainForm.GetCombo.Text;
@@ -301,7 +169,7 @@ namespace AccountancyCRUD.Controller
                             Id = it.id,
                             Name = it.name
                         }).ToArray();
-                    ((ComboBox)_departmentEmployeeForm.Departments).Text = tableRow.DepartmentId;
+                    ((ComboBox)_updateForm.Departments).Text = tableRow.DepartmentId;
                     _updateForm.GetId = tableRow.Id;
                     _updateForm.GetProjectName = tableRow.ProjectName;
                     _updateForm.GetCost = tableRow.Cost;
@@ -309,8 +177,11 @@ namespace AccountancyCRUD.Controller
                     _updateForm.GetBeginDate = tableRow.DateBegin;
                     _updateForm.GetEndRealDate = tableRow.DateEndReal;
 
+                    _updateForm.Text = "Update Form";
+                    _updateForm.GetApplyButton.Text = "Update entry";
                     _updateForm.GetApplyButton.Click += UpdateButton_Click;
                     _updateForm.ShowDialog();
+                    _updateForm.GetApplyButton.Click -= UpdateButton_Click;
                 }
                 else if (selectedTable == "Departments") //+
                 {
@@ -318,8 +189,11 @@ namespace AccountancyCRUD.Controller
                     _updateFormDepartments.GetId = tableRow.Id;
                     _updateFormDepartments.GetDepartmentName = tableRow.Name;
 
+                    _updateFormDepartments.Text = "Update Form";
+                    _updateFormDepartments.GetApplyButton.Text = "Update entry";
                     _updateFormDepartments.GetApplyButton.Click += UpdateButton_Click;
                     _updateFormDepartments.ShowDialog();
+                    _updateFormDepartments.GetApplyButton.Click -= UpdateButton_Click;
                 }
                 else if (selectedTable == "Employees")
                 {
@@ -332,8 +206,11 @@ namespace AccountancyCRUD.Controller
                     _updateFormEmployee.Position = tableRow.Position;
                     _updateFormEmployee.Salary = tableRow.Salary;
 
+                    _updateFormEmployee.Text = "Update Form";
+                    _updateFormEmployee.GetApplyButton.Text = "Update entry";
                     _updateFormEmployee.GetApplyButton.Click += UpdateButton_Click;
                     _updateFormEmployee.ShowDialog();
+                    _updateFormEmployee.GetApplyButton.Click -= UpdateButton_Click;
                 }
                 else if (selectedTable == "DepartmentsEmployees") //+
                 {
@@ -358,8 +235,11 @@ namespace AccountancyCRUD.Controller
                         }).ToArray();
                     ((ComboBox)_departmentEmployeeForm.Employees).Text = tableRow.EmployeeName;
 
+                    _departmentEmployeeForm.Text = "Update Form";
+                    _departmentEmployeeForm.GetApplyButton.Text = "Update entry";
                     _departmentEmployeeForm.GetApplyButton.Click += UpdateButton_Click;
                     _departmentEmployeeForm.ShowDialog();
+                    _departmentEmployeeForm.GetApplyButton.Click -= UpdateButton_Click;
                 }
             }
         }
@@ -409,6 +289,118 @@ namespace AccountancyCRUD.Controller
         #endregion
 
         #region Insert
+
+        private void InsertButton_Click(object sender, EventArgs e)
+        {
+            if (_currentTableName == "Projects")
+            {
+                var selected = ((ComboBox)_updateForm.Departments).SelectedItem;
+                int? id = null;
+                if (selected != null)
+                {
+                    id = ((Model.MyDepartment)selected).Id;
+                }
+                using (var context = new MyDbContext())
+                {
+                    context.Projects.Add(new Model.project
+                    {
+                        project_name = _updateForm.GetProjectName,
+                        date_begin = _updateForm.GetBeginDate,
+                        date_end = _updateForm.GetEndDate,
+                        date_end_real = _updateForm.GetEndRealDate,
+                        cost = _updateForm.GetCost,
+                        department_id = id
+                    });
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("handle trigger");
+                    }
+                }
+                _updateForm.Close();
+                //_updateForm.GetApplyButton.Click -= InsertButton_Click;
+            }
+            else if (_currentTableName == "Departments")
+            {
+                using (var context = new MyDbContext())
+                {
+                    context.Departments.Add(new Model.department
+                    {
+                        name = _updateFormDepartments.GetDepartmentName
+                    });
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("handle trigger");
+                    }
+                }
+                _updateFormDepartments.Close();
+                //_updateFormDepartments.GetApplyButton.Click -= InsertButton_Click;
+            }
+            else if (_currentTableName == "Employees")
+            {
+                using (var context = new MyDbContext())
+                {
+                    context.Employees.Add(new Model.employee
+                    {
+                        name = _updateFormEmployee.EmployeelName,
+                        surname = _updateFormEmployee.Surname,
+                        patronymic = _updateFormEmployee.Patronymic,
+                        position = _updateFormEmployee.Position,
+                        salary = _updateFormEmployee.Salary
+                    });
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("handle trigger");
+                    }
+                }
+                _updateFormEmployee.Close();
+                //_updateFormEmployee.GetApplyButton.Click -= InsertButton_Click;
+            }
+            else if (_currentTableName == "DepartmentsEmployees")
+            {
+                var selDep = ((ComboBox)_departmentEmployeeForm.Departments).SelectedItem;
+                var selEmpl = ((ComboBox)_departmentEmployeeForm.Employees).SelectedItem;
+                using (var context = new MyDbContext())
+                {
+                    try
+                    {
+                        context.DepartmentsEmployees.Add(new Model.departments_employees
+                        {
+                            employee_id = ((Model.MyEmployee)selEmpl).Id,
+                            department_id = ((Model.MyDepartment)selDep).Id
+                        });
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("handle trigger");
+                    }
+                }
+                _departmentEmployeeForm.Close();
+                //_departmentEmployeeForm.GetApplyButton.Click -= InsertButton_Click;
+            }
+
+            Read(this, new EventArgs());
+        }
+
         private void Insert(object sender, EventArgs e)
         {
             if (_currentTableName == "Projects")
@@ -429,16 +421,24 @@ namespace AccountancyCRUD.Controller
             }
             else if (_currentTableName == "Departments") // +
             {
+                _updateFormDepartments.Text = "Insert Form";
+                _updateFormDepartments.GetApplyButton.Text = "Insert new entry";
                 _updateFormDepartments.GetApplyButton.Click += InsertButton_Click;
                 _updateFormDepartments.ShowDialog();
+                _updateFormDepartments.GetApplyButton.Click -= InsertButton_Click;
             }
             else if (_currentTableName == "Employees")
             {
+                _updateFormEmployee.Text = "Insert Form";
+                _updateFormEmployee.GetApplyButton.Text = "Insert new entry";
                 _updateFormEmployee.GetApplyButton.Click += InsertButton_Click;
                 _updateFormEmployee.ShowDialog();
+                _updateFormEmployee.GetApplyButton.Click -= InsertButton_Click;
             }
             else if (_currentTableName == "DepartmentsEmployees")
             {
+                _departmentEmployeeForm.Text = "Insert Form";
+                _departmentEmployeeForm.GetApplyButton.Text = "Insert new entry";
                 _departmentEmployeeForm.GetApplyButton.Click += InsertButton_Click;
                 using (var context = new MyDbContext())
                 {
@@ -464,6 +464,7 @@ namespace AccountancyCRUD.Controller
                     ((ComboBox)_departmentEmployeeForm.Employees).SelectedIndex = 0;
                 }
                 _departmentEmployeeForm.ShowDialog();
+                _departmentEmployeeForm.GetApplyButton.Click -= InsertButton_Click;
             }
         }
         #endregion

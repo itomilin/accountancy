@@ -40,17 +40,5 @@ namespace AccountancyCRUD.View
                 return btnLogin;
             }
         }
-        /*
-                protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-                {
-                    if (keyData == Keys.Enter)
-                    {
-                        //MessageBox.Show($"You pressed the {Keys.Enter} key");
-                        return true;    // indicate that you handled this keystroke
-                    }
-
-                    // Call the base class
-                    return base.ProcessCmdKey(ref msg, keyData);
-                }*/
     }
 }
