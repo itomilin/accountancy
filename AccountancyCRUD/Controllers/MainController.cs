@@ -179,6 +179,11 @@ namespace AccountancyCRUD.Controller
 
                     _updateForm.Text = "Update Form";
                     _updateForm.GetApplyButton.Text = "Update entry";
+                    _updateForm.GetCostControl.Visible = false;
+                    _updateForm.GetEndTimeControl.Visible = false;
+                    _updateForm.GetBeginTimeControl.Visible = false;
+                    _updateForm.GetDepartmentControl.Visible = false;
+                    _updateForm.GetProjectControl.Visible = false;
                     _updateForm.GetApplyButton.Click += UpdateButton_Click;
                     _updateForm.ShowDialog();
                     _updateForm.GetApplyButton.Click -= UpdateButton_Click;
@@ -405,7 +410,7 @@ namespace AccountancyCRUD.Controller
         {
             if (_currentTableName == "Projects")
             {
-                _updateForm.GetApplyButton.Click += InsertButton_Click;
+                //_updateForm.GetApplyButton.Click += InsertButton_Click;
                 using (var context = new MyDbContext())
                 {
                     _updateForm.Departments = context.Departments.Select(
@@ -417,7 +422,9 @@ namespace AccountancyCRUD.Controller
                 }
                 _updateForm.Text = "Insert Form";
                 _updateForm.GetApplyButton.Text = "Insert new entry";
+                _updateForm.GetApplyButton.Click += InsertButton_Click;
                 _updateForm.ShowDialog();
+                _updateForm.GetApplyButton.Click -= InsertButton_Click;
             }
             else if (_currentTableName == "Departments") // +
             {

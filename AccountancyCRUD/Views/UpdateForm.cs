@@ -12,6 +12,12 @@ namespace AccountancyCRUD.View
         }
 
         public Button GetApplyButton => btnUpdate;
+        public NumericUpDown GetCostControl => numCost;
+
+        public TextBox GetProjectControl => tbProjectName;
+        public ComboBox GetDepartmentControl => cbDepartments;
+        public DateTimePicker GetBeginTimeControl => dtpBeginDate;
+        public DateTimePicker GetEndTimeControl => dtpEndDate;
 
         public decimal GetCost
         {

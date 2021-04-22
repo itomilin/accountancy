@@ -46,7 +46,7 @@ namespace AccountancyCRUD
         }
 
         /// <summary>
-        /// Creates a hash from a password with 10000 iterations
+        /// Creates a hash from a password with 10000 iterations, by default
         /// </summary>
         /// <param name="password">The password.</param>
         /// <returns>The hash.</returns>

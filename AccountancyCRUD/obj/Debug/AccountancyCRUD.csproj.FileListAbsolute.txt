@@ -68,4 +68,3 @@ C:\Users\dell\source\repos\AccountancyCRUD\AccountancyCRUD\bin\Debug\itext.sign.
 C:\Users\dell\source\repos\AccountancyCRUD\AccountancyCRUD\bin\Debug\itext.styledxmlparser.xml
 C:\Users\dell\source\repos\AccountancyCRUD\AccountancyCRUD\bin\Debug\itext.svg.xml
 C:\Users\dell\source\repos\AccountancyCRUD\AccountancyCRUD\bin\Debug\itextsharp.xml
-C:\Users\dell\source\repos\AccountancyCRUD\AccountancyCRUD\obj\Debug\AccountancyCRUD.csprojAssemblyReference.cache
